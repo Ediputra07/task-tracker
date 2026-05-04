@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { updateTaskStatus } from './actions'
+import DeleteButton from './_components/delete-button'
 
 export default async function TodayPage() {
   const supabase = await createClient()
@@ -108,7 +109,7 @@ export default async function TodayPage() {
                     <input type="hidden" name="new_status" value="done" />
                     <button formAction={updateTaskStatus}>Done</button>
                   </form>
-                )}
+                )}  
                 
                 {task.status === 'done' && (
                   <form>
@@ -117,6 +118,9 @@ export default async function TodayPage() {
                     <button formAction={updateTaskStatus}>Reopen</button>
                   </form>
                 )}
+
+                {/* TAMBAH INI — delete button selalu muncul */}
+                <DeleteButton taskId={task.id} />
               </div>
             </li>
           ))}

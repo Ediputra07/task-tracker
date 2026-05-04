@@ -38,3 +38,25 @@ export async function updateTaskStatus(formData: FormData) {
 
   revalidatePath('/today')
 }
+
+export async function deleteTask(taskId: string) {
+  const supabase = await createClient()
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
+    redirect('/login')
+  }
+
+  const { error } = await supabase
+    .from('tasks')
+    .delete()
+    .eq('id', taskId)
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.log('Delete task error:', error)
+    return
+  }
+
+  revalidatePath('/today')
+}
