@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { updateTaskStatus } from './actions'
 
 export default async function TodayPage() {
   const supabase = await createClient()
@@ -82,6 +83,40 @@ export default async function TodayPage() {
                 Due: {task.due_date 
                   ? new Date(task.due_date).toLocaleString('id-ID') 
                   : 'No due date'}
+              </div>
+              
+              {/* ===== Action buttons (kontekstual berdasarkan status) ===== */}
+              <div style={{ marginTop: '8px', display: 'flex', gap: '4px' }}>
+                {task.status === 'todo' && (
+                  <>
+                    <form>
+                      <input type="hidden" name="task_id" value={task.id} />
+                      <input type="hidden" name="new_status" value="in_progress" />
+                      <button formAction={updateTaskStatus}>Start</button>
+                    </form>
+                    <form>
+                      <input type="hidden" name="task_id" value={task.id} />
+                      <input type="hidden" name="new_status" value="done" />
+                      <button formAction={updateTaskStatus}>Done</button>
+                    </form>
+                  </>
+                )}
+                
+                {task.status === 'in_progress' && (
+                  <form>
+                    <input type="hidden" name="task_id" value={task.id} />
+                    <input type="hidden" name="new_status" value="done" />
+                    <button formAction={updateTaskStatus}>Done</button>
+                  </form>
+                )}
+                
+                {task.status === 'done' && (
+                  <form>
+                    <input type="hidden" name="task_id" value={task.id} />
+                    <input type="hidden" name="new_status" value="todo" />
+                    <button formAction={updateTaskStatus}>Reopen</button>
+                  </form>
+                )}
               </div>
             </li>
           ))}
