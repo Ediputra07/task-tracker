@@ -38,7 +38,22 @@ export default async function TodayPage() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Today</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>Today</h1>
+        <a 
+          href="/tasks/new" 
+          style={{ 
+            padding: '8px 16px', 
+            background: '#3b82f6', 
+            color: 'white', 
+            textDecoration: 'none',
+            borderRadius: '4px'
+          }}
+        >
+          + New Task
+        </a>
+      </div>
+
       <p>{tasks?.length ?? 0} task(s) due today or overdue</p>
       
       {tasks && tasks.length > 0 ? (
