@@ -136,6 +136,7 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 | 2026-04-30 | Skip Claude Design upfront | Sketch as we build; iteration faster than upfront mockups |
 | 2026-04-30 | Defer state mgmt / form / date library decisions | YAGNI until pain emerges |
 | 2026-05-04 | Disable email confirmation di dev | Faster dev experience; MUST RE-ENABLE before production deploy |
+| 2026-05-04 | Today view filter strict by due_date | Task tanpa due_date akan muncul di /all view (next step). Konsisten dengan spec view-views. |
 
 ## Notes for AI Assistant
 - User is learning Next.js + TypeScript for the first time
