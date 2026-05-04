@@ -29,10 +29,24 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // PENTING: refresh session
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  // ===== PROTECTED ROUTES LOGIC =====
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/signup') &&
+    !request.nextUrl.pathname.startsWith('/auth') &&
+    !request.nextUrl.pathname.startsWith('/error')
+  ) {
+    // No user, redirect to login
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+  // ===================================
 
   return supabaseResponse
 }
