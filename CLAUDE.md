@@ -140,6 +140,7 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 | 2026-05-04 | Today view filter strict (gak include done) | Sesuai spec — task done akan muncul di /done view nanti |
 | 2026-05-04 | Update status pakai plain form (Pendekatan 1) | Konsisten sama Server Action pattern; refactor ke Client Component nanti kalau perlu UX smoother |
 | 2026-05-04 | Status UX: hybrid kontekstual (Start/Done/Reopen) | UX intuitive, button label jelas berdasarkan status saat ini |
+| 2026-05-04 | Delete: Client Component + native confirm() | First Client Component in app; useTransition for loading state. Custom modal nanti pas polish. |
 
 ## Notes for AI Assistant
 - User is learning Next.js + TypeScript for the first time
