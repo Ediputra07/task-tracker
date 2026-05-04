@@ -135,6 +135,7 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 | 2026-04-30 | Hard delete + confirm dialog | Simpler MVP; soft delete deferred |
 | 2026-04-30 | Skip Claude Design upfront | Sketch as we build; iteration faster than upfront mockups |
 | 2026-04-30 | Defer state mgmt / form / date library decisions | YAGNI until pain emerges |
+| 2026-05-04 | Disable email confirmation di dev | Faster dev experience; MUST RE-ENABLE before production deploy |
 
 ## Notes for AI Assistant
 - User is learning Next.js + TypeScript for the first time
