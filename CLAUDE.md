@@ -6,6 +6,7 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 + 🚧 In Development — Scaffolding done, schema ready, starting auth.
 
 ## Live References
+- **Production:** https://task-tracker-zeta-navy-12.vercel.app
 - Previous project (finance-tracker): https://finance-tracker-wine-gamma.vercel.app
 - Finance-tracker repo: https://github.com/Ediputra07/finance-tracker
 
@@ -142,6 +143,7 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 | 2026-05-04 | Status UX: hybrid kontekstual (Start/Done/Reopen) | UX intuitive, button label jelas berdasarkan status saat ini |
 | 2026-05-04 | Delete: Client Component + native confirm() | First Client Component in app; useTransition for loading state. Custom modal nanti pas polish. |
 | 2026-05-04 | Rename middleware → proxy | Next.js 16 deprecated middleware convention. proxy is the new convention. Function name + file name + import paths updated. |  
+| 2026-05-05 | Deployed to Vercel for mobile-first dogfooding | Production URL set as Supabase Site URL; localhost + production both whitelisted |
 
 ## Notes for AI Assistant
 - User is learning Next.js + TypeScript for the first time
