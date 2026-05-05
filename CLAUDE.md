@@ -3,18 +3,22 @@
 A task tracking web app for managing daily tasks, deadlines, and reminders. Used for university assignments, daily targets, and personal task management. Built mobile-first with reminder capability.
 
 ## Status
-+ 🚧 In Development — Scaffolding done, schema ready, starting auth.
+🚧 **MVP Deployed — Dogfooding Phase**
+
+Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu polish + extend.
 
 ## Live References
 - **Production:** https://task-tracker-zeta-navy-12.vercel.app
+- **Repo:** https://github.com/Ediputra07/task-tracker
 - Previous project (finance-tracker): https://finance-tracker-wine-gamma.vercel.app
 - Finance-tracker repo: https://github.com/Ediputra07/finance-tracker
 
 ## Tech Stack
 - **Frontend:** Next.js 16 (App Router) + TypeScript + React 19
-- **Styling:** Tailwind CSS v4
+- **Styling:** Tailwind CSS v4 (currently using inline styles — Tailwind setup pending polish phase)
 - **Backend:** Supabase (PostgreSQL + Auth + RLS)
-- **Hosting:** Vercel (planned)
+- **Hosting:** Vercel
+- **Region:** Singapore (Supabase) — low latency from Indonesia
 
 ## Spec Decisions
 
@@ -33,16 +37,16 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 - **Not in MVP** — revisit if pain point appears after use
 
 ### Notifications
-- **MVP:** In-app badge (overdue/today indicator on nav)
+- **MVP:** In-app badge (overdue/today indicator on nav) — not yet built
 - **Phase 2:** Browser push notifications (PWA)
 - **Skipped:** WhatsApp/SMS (too expensive for personal)
 - **Future option:** Telegram bot (free alternative)
 
 ### Views (MVP)
-1. **Today** — due today + overdue (highlighted)
-2. **Upcoming** — next 7 days, grouped by day
-3. **All** — full list, filterable
-4. **Done** — completed tasks
+1. **Today** ✅ — due today + overdue (status != done), filter strict by due_date
+2. **Upcoming** ⏳ — next 7 days, grouped by day (not yet built)
+3. **All** ⏳ — full list, filterable (not yet built)
+4. **Done** ⏳ — completed tasks (not yet built)
 
 ### Skipped from MVP
 - Calendar view
@@ -53,67 +57,123 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 ### Multi-device Sync
 - Via Supabase (same as finance-tracker)
 
+## What's Already Built
+
+### Schema
+- `categories`: id, user_id, name, color (unique per user)
+- `tasks`: id, user_id, title, description, due_date, status, priority, category_id, completed_at, created_at, updated_at
+- RLS policies: user only access own data
+- Indexes: (user_id, due_date), (user_id, status), (user_id, category_id)
+- File: `schema.sql` at repo root
+
+### Auth Flow
+- `/login` — login + signup form (Server Component, plain HTML form + Server Actions)
+- `/auth/callback` — not yet built (email confirmation disabled in production for now)
+- `/error` — generic error fallback
+- Server Actions: `login()`, `signup()`, `logout()` in respective `actions.ts` files
+- Email confirmation: **disabled** in Supabase. MUST re-enable + build callback handler before public release.
+
+### Protected Routes
+- `src/proxy.ts` — Next.js 16 convention (replaces deprecated middleware)
+- `src/lib/supabase/proxy.ts` — helper with `updateSession()` function
+- Logic: redirect non-auth users to /login except for /login, /signup, /auth, /error
+
+### Pages Implemented
+- `/dashboard` — placeholder showing user email + UUID + logout button
+- `/today` — list of tasks due today + overdue, with action buttons per task
+- `/tasks/new` — form to create new task
+
+### Task CRUD
+- **Create:** form at `/tasks/new` with title (required), description, due_date (datetime-local), priority dropdown, category dropdown
+- **Read:** `/today` view fetches tasks via Supabase, filtered & ordered
+- **Update Status:** contextual buttons per task — Start/Done (todo), Done (in_progress), Reopen (done). Plain form + Server Action.
+- **Delete:** Client Component (`_components/delete-button.tsx`) with native `confirm()` + `useTransition`. Hard delete.
+
+### Supabase Clients
+- `src/lib/supabase/client.ts` — for Client Components (browser context)
+- `src/lib/supabase/server.ts` — for Server Components (server-side context)
+- `src/lib/supabase/proxy.ts` — for proxy/middleware (request/response object handling)
+- Pattern: callback-based cookies access for cross-environment compatibility
+
+### Seed Data
+- File: `seed.sql` at repo root
+- 10 sample tasks with mix of statuses, priorities, categories
+- Run manually in Supabase SQL Editor with user UUID replaced
+
 ## Developer Context
 
 ### Background
 - Information Systems student, 4th semester
 - Previous project: finance-tracker (React + Vite + Supabase) — successfully deployed
-- Familiar with: React, Tailwind, Supabase, Git workflow
-- **New to:** Next.js App Router, TypeScript
+- Familiar with: React, Tailwind v3, Supabase, Git workflow
+- **First time building with:** Next.js App Router, TypeScript, Tailwind v4, React 19
 
 ### Learning Goals
-- TypeScript proficiency
-- Next.js paradigms (Server Components, Client Components, App Router, Server Actions)
-- PWA setup for push notifications
+- TypeScript proficiency (currently: solid foundation in type assertion, optional chaining, narrowing, typed props)
+- Next.js paradigms (currently: solid in Server/Client Components, Server Actions, proxy)
+- Tailwind v4 paradigm (CSS-based config) — not yet practiced
+- PWA setup for push notifications — Phase 2
 
 ### Workflow Preferences
-- "Pelan tapi runtut" — step by step with clear explanations
-- Intellectual sparring partner mode — push back on weak assumptions
-- Conventional Commits for git messages
-- Test production build before deploy
-- Understand "why" before "how"
+- **"Pelan tapi runtut"** — step by step with clear explanations
+- **Intellectual sparring partner mode** — push back on weak assumptions, prioritize truth over agreement
+- **Conventional Commits** for git messages (feat/fix/chore/docs)
+- **Logical commit chunking** — one commit = one self-contained logical change
+- **Test production build before deploy** (`npm run build` + `npm run start`)
+- **Understand "why" before "how"** — avoid cargo cult coding
 
 ## Tools Used
-- **Claude.ai chat** — planning, architecture, concept discussion
-- **Claude Code (VS Code)** — active coding, refactoring, file edits
-- **Claude Design** — UI/UX exploration (planned, pre-coding phase)
+- **Claude.ai chat** — initial scaffolding, concept teaching, decision sparring (this is the chat tool)
+- **Claude Code (VS Code)** — active coding, refactoring, file edits (next phase)
+- **AGENTS.md** — instructs AI agents to read local Next.js docs in `node_modules/next/dist/docs/` (because training data may be outdated for Next.js 16)
 
-## Patterns from Finance-Tracker (Reuse)
-- Custom hooks for all data logic (`useTasks`, `useCategories`)
-- Three-state rendering (loading → empty → data)
-- Toast notifications (react-hot-toast) instead of `alert()`
-- Custom ConfirmDialog instead of `window.confirm()`
-- Adaptive navigation (bottom nav mobile + sidebar desktop)
-- Conventional Commits
+## Patterns from Finance-Tracker (Reuse Targets)
+- Custom hooks for all data logic (`useTasks`, `useCategories`) — not yet implemented in task-tracker
+- Three-state rendering (loading → empty → data) — partial; current `/today` shows empty state
+- Toast notifications (react-hot-toast) instead of `alert()` — pending polish phase
+- Custom ConfirmDialog instead of `window.confirm()` — pending polish phase
+- Adaptive navigation (bottom nav mobile + sidebar desktop) — pending polish phase
 
-## New Patterns to Learn
-- TypeScript types for all data models
-- Next.js App Router routing
-- Server Components vs Client Components distinction
-- Server Actions
+## Patterns Already Established in Task-Tracker
+- TypeScript types for all data models (where introduced)
+- Server Action pattern: `formData: FormData` parameter, parse with `formData.get()`, validate, mutate, revalidatePath, redirect
+- Client Component for interactive UI (e.g. DeleteButton with `useTransition`)
+- Defense in depth: auth check + ownership filter (`.eq('user_id', user.id)`) on every Server Action
+- Error handling via redirect with query param (e.g. `/tasks/new?error=title_required`)
+- Convention: page-level `actions.ts` next to `page.tsx`, private components in `_components/`
 
-## Open Decisions (Pre-Coding)
-1. ~~Server Components vs Client Components strategy~~ (decide per-component as we build)
-2. State management: start with useState, escalate only if needed (YAGNI)
-3. Form library: start manual, react-hook-form if forms get complex
-4. Date library: native Intl + small helpers, date-fns if pain emerges
+## Open Decisions (Resolved)
+1. ✅ Server Components vs Client Components — decide per-component as we build
+2. ✅ State management — useState only; no library yet
+3. ✅ Form library — manual `formData` handling; no react-hook-form yet
+4. ✅ Date library — native Intl + JavaScript Date; no date-fns yet
 
 ## Outstanding TODO
 
-### Pre-Coding
-- [x] ~~Design UI in Claude Design~~ (skipped — sketch as you build)
-- [x] Database schema for tasks + categories (done, deployed to Supabase)
-- [ ] Decide bottom nav pattern (defer to UI building phase)
+### Immediate (post-dogfood)
+- [ ] Update CLAUDE.md "Dogfood Notes" with pain points discovered
+- [ ] Prioritize next features based on real usage feedback
 
-### MVP Roadmap
-- [x] Supabase project setup (separate from finance-tracker)
-- [x] Schema deployed (tasks + categories with RLS)
-- [ ] Auth flow with Next.js  ← NEXT STEP
-- [ ] Task CRUD
-- [ ] Category management
-- [ ] Today / Upcoming / All views
-- [ ] In-app notification badge
-- [ ] Deploy to Vercel
+### MVP Continuation
+- [ ] /upcoming view (next 7 days, grouped by day)
+- [ ] /all view (full list, includes tasks with no due_date)
+- [ ] /done view (completed tasks, with Reopen button)
+- [ ] Category management UI (add/edit/delete categories)
+- [ ] In-app notification badge (overdue count on nav)
+
+### Polish Phase
+- [ ] Tailwind v4 setup (replace inline styles)
+- [ ] Bottom nav (mobile) + sidebar (desktop) — adaptive navigation
+- [ ] react-hot-toast for success/error notifications
+- [ ] Custom ConfirmDialog (replace native `confirm()`)
+- [ ] Loading states (Suspense / skeleton screens)
+- [ ] Three-state rendering pattern (loading → empty → data)
+
+### Pre-Public Release
+- [ ] Build `/auth/confirm` route handler for email confirmation
+- [ ] Re-enable email confirmation in Supabase
+- [ ] Update Supabase Auth → URL Configuration (already done)
+- [ ] Custom domain (optional)
 
 ### Post-MVP
 - [ ] Recurring tasks
@@ -122,10 +182,21 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 - [ ] Search/filter
 - [ ] Telegram bot integration
 
-## New Patterns to Learn
-- Tailwind v4 paradigm (CSS-based config, @theme directive)
-- Next.js 16 async APIs (cookies, headers, params)
-- React 19 new hooks and patterns
+## Dogfood Notes
+
+> Diisi selama pakai app sehari-hari. Catat pain point + missing feature di sini supaya prioritas Claude Code session berikutnya jelas.
+
+### Pain Points
+- [TBD setelah pakai 1-3 hari]
+
+### Missing Features (yang kerasa pas dipake)
+- [TBD]
+
+### UX Issues
+- [TBD]
+
+### Bug yang Ditemukan
+- [TBD]
 
 ## Decision Log
 
@@ -136,19 +207,36 @@ A task tracking web app for managing daily tasks, deadlines, and reminders. Used
 | 2026-04-30 | Hard delete + confirm dialog | Simpler MVP; soft delete deferred |
 | 2026-04-30 | Skip Claude Design upfront | Sketch as we build; iteration faster than upfront mockups |
 | 2026-04-30 | Defer state mgmt / form / date library decisions | YAGNI until pain emerges |
-| 2026-05-04 | Disable email confirmation di dev | Faster dev experience; MUST RE-ENABLE before production deploy |
+| 2026-05-04 | Disable email confirmation di dev | Faster dev experience; MUST RE-ENABLE before public release |
 | 2026-05-04 | Today view filter strict by due_date | Task tanpa due_date akan muncul di /all view (next step). Konsisten dengan spec view-views. |
 | 2026-05-04 | Today view filter strict (gak include done) | Sesuai spec — task done akan muncul di /done view nanti |
 | 2026-05-04 | Update status pakai plain form (Pendekatan 1) | Konsisten sama Server Action pattern; refactor ke Client Component nanti kalau perlu UX smoother |
 | 2026-05-04 | Status UX: hybrid kontekstual (Start/Done/Reopen) | UX intuitive, button label jelas berdasarkan status saat ini |
 | 2026-05-04 | Delete: Client Component + native confirm() | First Client Component in app; useTransition for loading state. Custom modal nanti pas polish. |
-| 2026-05-04 | Rename middleware → proxy | Next.js 16 deprecated middleware convention. proxy is the new convention. Function name + file name + import paths updated. |  
+| 2026-05-04 | Rename middleware → proxy | Next.js 16 deprecated middleware convention. proxy is the new convention. Function name + file name + import paths updated. |
 | 2026-05-05 | Deployed to Vercel for mobile-first dogfooding | Production URL set as Supabase Site URL; localhost + production both whitelisted |
+| 2026-05-05 | Keep email confirmation disabled until polish phase | Personal app, low risk of spam signup. Re-enable when /auth/confirm handler built. |
 
 ## Notes for AI Assistant
-- User is learning Next.js + TypeScript for the first time
-- Don't assume same comfort level as finance-tracker
-- Explain TypeScript concepts inline when introducing new patterns
-- Push back on weak assumptions
-- Default to teaching mode — "why" before "how"
-- Always ask clarifying questions before assuming scope
+
+### Context
+- User is learning Next.js 16 + TypeScript + Tailwind v4 for the first time
+- Has solid foundation in: React, Supabase, Git, Conventional Commits
+- Successfully shipped finance-tracker (React + Vite) before this project
+- Currently in "dogfooding" phase — using app daily to find pain points
+
+### Behavior Guidelines
+- **Don't assume same comfort level as finance-tracker** — Next.js paradigm is new
+- **Explain TypeScript concepts inline** when introducing new patterns
+- **Push back on weak assumptions** — user explicitly requests sparring partner mode
+- **Default to teaching mode** — "why" before "how"
+- **Always ask clarifying questions** before assuming scope
+- **Verify before action** — check `git status`, `npm run build`, etc.
+- **Maintain commit hygiene** — Conventional Commits, logical chunking
+- **Update Decision Log** for any non-trivial decision made during the session
+
+### Anti-patterns to Avoid
+- Cargo cult coding — generating code user doesn't understand
+- Scope creep — doing more than what was asked in one prompt
+- Skipping verification — assuming things work without testing
+- Vague status updates — be specific about what's done vs not
