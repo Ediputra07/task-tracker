@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { updateTaskStatus } from './actions'
+import { updateTaskStatus, logout } from './actions'
 import DeleteButton from './_components/delete-button'
 
 export default async function TodayPage() {
@@ -42,18 +42,23 @@ export default async function TodayPage() {
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Today</h1>
-        <a 
-          href="/tasks/new" 
-          style={{ 
-            padding: '8px 16px', 
-            background: '#3b82f6', 
-            color: 'white', 
-            textDecoration: 'none',
-            borderRadius: '4px'
-          }}
-        >
-          + New Task
-        </a>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <a
+            href="/tasks/new"
+            style={{
+              padding: '8px 16px',
+              background: '#3b82f6',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '4px'
+            }}
+          >
+            + New Task
+          </a>
+          <form>
+            <button formAction={logout}>Log out</button>
+          </form>
+        </div>
       </div>
 
       <p>{tasks?.length ?? 0} task(s) due today or overdue</p>

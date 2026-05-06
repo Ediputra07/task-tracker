@@ -5,7 +5,6 @@
 -- 1. Replace 'YOUR_USER_ID_HERE' below with actual user UUID
 --    (ada 2 tempat: di variable + di query verify di akhir)
 -- 2. Get UUID from Supabase Dashboard → Authentication → Users
---    OR from /dashboard page in app
 -- ============================================================
 
 do $$

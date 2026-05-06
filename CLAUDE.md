@@ -79,7 +79,6 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - Logic: redirect non-auth users to /login except for /login, /signup, /auth, /error
 
 ### Pages Implemented
-- `/dashboard` — placeholder showing user email + UUID + logout button
 - `/today` — list of tasks due today + overdue, with action buttons per task
 - `/tasks/new` — form to create new task
 
