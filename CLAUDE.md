@@ -167,6 +167,7 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - [ ] Custom ConfirmDialog (replace native `confirm()`)
 - [ ] Loading states (Suspense / skeleton screens)
 - [ ] Three-state rendering pattern (loading → empty → data)
+- [ ] Review `<html lang="...">` di `layout.tsx` — saat ini "en", konten campur ID/EN. Decide saat polish.
 
 ### Pre-Public Release
 - [ ] Build `/auth/confirm` route handler for email confirmation
