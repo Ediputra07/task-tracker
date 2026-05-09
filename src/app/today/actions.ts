@@ -19,7 +19,7 @@ export async function updateTaskStatus(formData: FormData) {
   const validStatuses = ['todo', 'in_progress', 'done']
   if (!validStatuses.includes(newStatus)) {
     console.log('Invalid status:', newStatus)
-    return
+    redirect('/today?error=update_failed')
   }
 
   const { error } = await supabase
@@ -33,7 +33,7 @@ export async function updateTaskStatus(formData: FormData) {
 
   if (error) {
     console.log('Update task error:', error)
-    return
+    redirect('/today?error=update_failed')
   }
 
   revalidatePath('/today')
@@ -55,7 +55,7 @@ export async function deleteTask(taskId: string) {
 
   if (error) {
     console.log('Delete task error:', error)
-    return
+    redirect('/today?error=delete_failed')
   }
 
   revalidatePath('/today')

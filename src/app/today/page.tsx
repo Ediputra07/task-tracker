@@ -3,13 +3,20 @@ import { createClient } from '@/lib/supabase/server'
 import { updateTaskStatus, logout } from './actions'
 import DeleteButton from './_components/delete-button'
 
-export default async function TodayPage() {
+export default async function TodayPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
   const supabase = await createClient()
-  
+
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
     redirect('/login')
   }
+
+  const params = await searchParams
+  const errorParam = params.error
   
   // Fetch tasks: due today OR overdue (and not done)
   const today = new Date()
@@ -60,6 +67,18 @@ export default async function TodayPage() {
           </form>
         </div>
       </div>
+
+      {errorParam === 'update_failed' && (
+        <div style={{ color: 'red', marginBottom: '12px' }}>
+          ⚠️ Failed to update task. Try again.
+        </div>
+      )}
+
+      {errorParam === 'delete_failed' && (
+        <div style={{ color: 'red', marginBottom: '12px' }}>
+          ⚠️ Failed to delete task. Try again.
+        </div>
+      )}
 
       <p>{tasks?.length ?? 0} task(s) due today or overdue</p>
       
