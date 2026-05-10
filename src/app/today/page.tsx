@@ -17,7 +17,14 @@ export default async function TodayPage({
 
   const params = await searchParams
   const errorParam = params.error
-  
+
+  const errorMessages: Record<string, string> = {
+    update_failed: '⚠️ Failed to update task. Try again.',
+    delete_failed: '⚠️ Failed to delete task. Try again.',
+    not_found: '⚠️ Task not found or already deleted.',
+  }
+  const errorMessage = errorParam ? errorMessages[errorParam] : null
+
   // Fetch tasks: due today OR overdue (and not done)
   const today = new Date()
   today.setHours(23, 59, 59, 999)  // end of today
@@ -65,15 +72,9 @@ export default async function TodayPage({
         </div>
       </div>
 
-      {errorParam === 'update_failed' && (
+      {errorMessage && (
         <div style={{ color: 'red', marginBottom: '12px' }}>
-          ⚠️ Failed to update task. Try again.
-        </div>
-      )}
-
-      {errorParam === 'delete_failed' && (
-        <div style={{ color: 'red', marginBottom: '12px' }}>
-          ⚠️ Failed to delete task. Try again.
+          {errorMessage}
         </div>
       )}
 
@@ -140,7 +141,12 @@ export default async function TodayPage({
                   </form>
                 )}
 
-                {/* TAMBAH INI — delete button selalu muncul */}
+                <a
+                  href={`/tasks/${task.id}/edit`}
+                  style={{ padding: '4px 8px' }}
+                >
+                  Edit
+                </a>
                 <DeleteButton taskId={task.id} />
               </div>
             </li>
