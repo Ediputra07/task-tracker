@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import type { TaskStatus } from '@/lib/types'
 
 export async function updateTaskStatus(formData: FormData) {
   const supabase = await createClient()
@@ -16,8 +17,8 @@ export async function updateTaskStatus(formData: FormData) {
   const newStatus = formData.get('new_status') as string
 
   // Validate status (defense)
-  const validStatuses = ['todo', 'in_progress', 'done']
-  if (!validStatuses.includes(newStatus)) {
+  const validStatuses = ['todo', 'in_progress', 'done'] satisfies TaskStatus[]
+  if (!validStatuses.includes(newStatus as TaskStatus)) {
     console.log('Invalid status:', newStatus)
     redirect('/today?error=update_failed')
   }

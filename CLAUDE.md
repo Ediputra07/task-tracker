@@ -134,7 +134,7 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - Adaptive navigation (bottom nav mobile + sidebar desktop) — pending polish phase
 
 ## Patterns Already Established in Task-Tracker
-- TypeScript types for all data models (where introduced)
+- Shared TypeScript types in `src/lib/types.ts` (manual, schema-aligned)
 - Server Action pattern: `formData: FormData` parameter, parse with `formData.get()`, validate, mutate, revalidatePath, redirect
 - Client Component for interactive UI (e.g. DeleteButton with `useTransition`)
 - Defense in depth: auth check + ownership filter (`.eq('user_id', user.id)`) on every Server Action
