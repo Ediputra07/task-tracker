@@ -185,16 +185,28 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 
 ## Dogfood Notes
 
-> Diisi selama pakai app sehari-hari. Catat pain point + missing feature di sini supaya prioritas Claude Code session berikutnya jelas.
+> Diisi selama pakai app sehari-hari.
 
 ### Pain Points
-- [TBD setelah pakai 1-3 hari]
+- Gak bisa edit task — harus hapus + buat ulang (blocking)
+- Gak bisa lihat semua task — /all view dibutuhkan
+- Gak bisa lihat upcoming tasks — /upcoming dibutuhkan
+- Gak bisa lihat completed tasks — /done dibutuhkan
+- UI masih raw (inline styles) — susah dibaca di mobile
+
+### Revised Priority (based on dogfood)
+1. Edit task (blocking — harus hapus+bikin ulang kalau salah)
+2. /upcoming view
+3. Tailwind v4 + bottom nav (Today/Upcoming/All/Done)
+4. /all dan /done view
 
 ### Missing Features (yang kerasa pas dipake)
-- [TBD]
+- Edit task fields (title, description, due_date, priority, category)
+- View selector / navigation antar views
 
 ### UX Issues
-- [TBD]
+- Gak ada bottom navigation — gak bisa pindah view
+- Task card terlalu plain — susah bedain priority/status
 
 ### Bug yang Ditemukan
 - [TBD]
