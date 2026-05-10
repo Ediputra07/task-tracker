@@ -207,6 +207,8 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 ### UX Issues
 - Gak ada bottom navigation — gak bisa pindah view
 - Task card terlalu plain — susah bedain priority/status
+- Edit dari `/done` → save → redirect ke `/today`. Task tetep status `done`, jadi gak muncul di /today (filtered out). User mungkin bingung. Fix: pass `?from=done` di query dan redirect kembali.
+- Reopen dari `/done` → redirect ke `/today`. Kalau task gak punya `due_date`, gak akan muncul di /today (filter strict). User mungkin bingung "task hilang". Fix: redirect ke `/all` (yang pasti show task active), atau pass source view.
 
 ### Bug yang Ditemukan
 - [TBD]

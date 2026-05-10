@@ -1,8 +1,8 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { revalidateActiveTaskViews } from '@/lib/revalidate'
 
 export async function createTask(formData: FormData) {
   const supabase = await createClient()
@@ -41,8 +41,6 @@ export async function createTask(formData: FormData) {
     redirect('/tasks/new?error=insert_failed')
   }
 
-  // TODO: Re-add revalidatePath('/all') saat route-nya dibikin
-  revalidatePath('/today')
-  revalidatePath('/upcoming')
+  revalidateActiveTaskViews()
   redirect('/today')
 }

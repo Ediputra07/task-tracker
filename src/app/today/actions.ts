@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { TaskStatus } from '@/lib/types'
+import { revalidateAllTaskViews } from '@/lib/revalidate'
 
 export async function updateTaskStatus(formData: FormData) {
   const supabase = await createClient()
@@ -37,8 +38,7 @@ export async function updateTaskStatus(formData: FormData) {
     redirect('/today?error=update_failed')
   }
 
-  revalidatePath('/today')
-  revalidatePath('/upcoming')
+  revalidateAllTaskViews()
 }
 
 export async function deleteTask(taskId: string) {
@@ -60,8 +60,7 @@ export async function deleteTask(taskId: string) {
     redirect('/today?error=delete_failed')
   }
 
-  revalidatePath('/today')
-  revalidatePath('/upcoming')
+  revalidateAllTaskViews()
 }
 
 export async function logout() {

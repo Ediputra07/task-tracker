@@ -1,8 +1,8 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { revalidateAllTaskViews } from '@/lib/revalidate'
 
 export async function updateTask(formData: FormData) {
   const supabase = await createClient()
@@ -40,7 +40,6 @@ export async function updateTask(formData: FormData) {
     redirect(`/tasks/${id}/edit?error=update_failed`)
   }
 
-  revalidatePath('/today')
-  revalidatePath('/upcoming')
+  revalidateAllTaskViews()
   redirect('/today')
 }
