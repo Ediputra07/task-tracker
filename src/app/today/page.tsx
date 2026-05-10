@@ -24,17 +24,14 @@ export default async function TodayPage({
   
   const { data: tasks, error } = await supabase
     .from('tasks')
+    // TODO: Re-add `categories (name, color)` join saat kategori UI dibikin
     .select(`
       id,
       title,
       description,
       due_date,
       status,
-      priority,
-      categories (
-        name,
-        color
-      )
+      priority
     `)
     .eq('user_id', user.id)
     .neq('status', 'done')
