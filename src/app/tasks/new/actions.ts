@@ -41,8 +41,7 @@ export async function createTask(formData: FormData) {
     redirect('/tasks/new?error=insert_failed')
   }
 
+  // TODO: Re-add revalidatePath('/upcoming') & ('/all') saat route-nya dibikin
   revalidatePath('/today')
-  revalidatePath('/upcoming')
-  revalidatePath('/all')
   redirect('/today')
 }
