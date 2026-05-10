@@ -170,6 +170,13 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - [ ] Review `<html lang="...">` di `layout.tsx` — saat ini "en", konten campur ID/EN. Decide saat polish.
 - [ ] Language consistency audit (ID vs EN) — `confirm()` dialogs pakai ID, error banner pakai EN. Decide and sweep.
 
+### Technical Debt (defer ke polish)
+- Cross-page import: `updateTaskStatus` / `logout` / `DeleteButton` di-import dari `@/app/today/...` di /upcoming, /all, /done. Fix: extract ke `src/lib/actions/tasks.ts`.
+- TaskCard component: duplikasi 90+ baris di 4 view (today, upcoming, all, done). Fix: extract saat call site ke-3 muncul (kondisi udah terpenuhi — eligible kapan saja).
+- Filter di /all: defer sampai dogfood feedback.
+- Style sweep: inline styles di semua page kecuali bottom nav. Adopt Tailwind v4 (sudah set up).
+- `/auth/confirm` handler + re-enable email confirmation di Supabase (pre-public release).
+
 ### Pre-Public Release
 - [ ] Build `/auth/confirm` route handler for email confirmation
 - [ ] Re-enable email confirmation in Supabase
@@ -207,8 +214,10 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 ### UX Issues
 - Gak ada bottom navigation — gak bisa pindah view
 - Task card terlalu plain — susah bedain priority/status
-- Edit dari `/done` → save → redirect ke `/today`. Task tetep status `done`, jadi gak muncul di /today (filtered out). User mungkin bingung. Fix: pass `?from=done` di query dan redirect kembali.
-- Reopen dari `/done` → redirect ke `/today`. Kalau task gak punya `due_date`, gak akan muncul di /today (filter strict). User mungkin bingung "task hilang". Fix: redirect ke `/all` (yang pasti show task active), atau pass source view.
+
+### Known UX Limitations (discovered sesi 2)
+- Edit/Reopen dari `/done` redirect ke `/today` (bukan balik ke `/done`)
+- Task tanpa `due_date` gak muncul di `/today` setelah Reopen
 
 ### Bug yang Ditemukan
 - [TBD]
