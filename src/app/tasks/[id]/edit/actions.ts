@@ -41,5 +41,6 @@ export async function updateTask(formData: FormData) {
   }
 
   revalidatePath('/today')
+  revalidatePath('/upcoming')
   redirect('/today')
 }

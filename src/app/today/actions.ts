@@ -38,6 +38,7 @@ export async function updateTaskStatus(formData: FormData) {
   }
 
   revalidatePath('/today')
+  revalidatePath('/upcoming')
 }
 
 export async function deleteTask(taskId: string) {
@@ -60,6 +61,7 @@ export async function deleteTask(taskId: string) {
   }
 
   revalidatePath('/today')
+  revalidatePath('/upcoming')
 }
 
 export async function logout() {
