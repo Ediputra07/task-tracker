@@ -1,7 +1,10 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+// TODO: Move shared actions (updateTaskStatus, logout) to src/lib/actions/tasks.ts
+// when /all and /done views also need them (currently imported from today/actions.ts)
 import { updateTaskStatus, logout } from '@/app/today/actions'
 import DeleteButton from '@/app/today/_components/delete-button'
+import BottomNav from '@/app/_components/bottom-nav'
 
 function pad(n: number): string {
   return String(n).padStart(2, '0')
@@ -58,7 +61,8 @@ export default async function UpcomingPage() {
   }
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <>
+      <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Upcoming</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -153,6 +157,8 @@ export default async function UpcomingPage() {
           </div>
         ))
       )}
-    </div>
+      </div>
+      <BottomNav />
+    </>
   )
 }

@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { updateTaskStatus, logout } from './actions'
 import DeleteButton from './_components/delete-button'
+import BottomNav from '@/app/_components/bottom-nav'
 
 export default async function TodayPage({
   searchParams,
@@ -50,7 +51,8 @@ export default async function TodayPage({
   }
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <>
+      <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Today</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -155,6 +157,8 @@ export default async function TodayPage({
       ) : (
         <p>No tasks due today. 🎉</p>
       )}
-    </div>
+      </div>
+      <BottomNav />
+    </>
   )
 }
