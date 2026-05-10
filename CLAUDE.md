@@ -67,11 +67,11 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - File: `schema.sql` at repo root
 
 ### Auth Flow
-- `/login` — login + signup form (Server Component, plain HTML form + Server Actions)
+- `/login` — login + signup form (Server Component, plain HTML form + Server Actions). Granular error via `?error=` query param: `invalid_credentials`, `email_taken`, `weak_password`, `signup_failed`.
 - `/auth/callback` — not yet built (email confirmation disabled in production for now)
-- `/error` — generic error fallback
 - Server Actions: `login()`, `signup()`, `logout()` in respective `actions.ts` files
 - Email confirmation: **disabled** in Supabase. MUST re-enable + build callback handler before public release.
+- **Known limitation:** `email_taken` error detection matches Supabase `error.message` substring (`'already registered'` / `'already exists'`). Fragile if Supabase changes wording. Acceptable for MVP; revisit if signup error UX matters more.
 
 ### Protected Routes
 - `src/proxy.ts` — Next.js 16 convention (replaces deprecated middleware)
@@ -168,6 +168,7 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 - [ ] Loading states (Suspense / skeleton screens)
 - [ ] Three-state rendering pattern (loading → empty → data)
 - [ ] Review `<html lang="...">` di `layout.tsx` — saat ini "en", konten campur ID/EN. Decide saat polish.
+- [ ] Language consistency audit (ID vs EN) — `confirm()` dialogs pakai ID, error banner pakai EN. Decide and sweep.
 
 ### Pre-Public Release
 - [ ] Build `/auth/confirm` route handler for email confirmation
@@ -216,6 +217,7 @@ Core CRUD shipped to production. Pakai sehari-hari, catat pain points, lalu poli
 | 2026-05-04 | Rename middleware → proxy | Next.js 16 deprecated middleware convention. proxy is the new convention. Function name + file name + import paths updated. |
 | 2026-05-05 | Deployed to Vercel for mobile-first dogfooding | Production URL set as Supabase Site URL; localhost + production both whitelisted |
 | 2026-05-05 | Keep email confirmation disabled until polish phase | Personal app, low risk of spam signup. Re-enable when /auth/confirm handler built. |
+| 2026-05-06 | Granular login errors via `?error=` query param | Replaces generic `/error` redirect. 4 codes: `invalid_credentials`, `email_taken`, `weak_password`, `signup_failed`. `email_taken` matches Supabase `error.message` substring (fragile, acceptable for MVP). `/error` route + proxy whitelist removed. |
 
 ## Notes for AI Assistant
 
