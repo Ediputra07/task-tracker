@@ -21,7 +21,7 @@ task-tracker/
 
 ## 📱 Download APK
 
-> **[⬇️ Download app-release.apk](https://github.com/Ediputra07/task-tracker/releases/latest)**
+> **[⬇️ Download app-release.apk](https://github.com/Ediputra07/task-tracker/releases/)**
 
 ## ✨ Fitur
 

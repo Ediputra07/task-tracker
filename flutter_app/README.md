@@ -15,7 +15,7 @@ Mobile client untuk Task Tracker, dibangun dengan Flutter dan Supabase.
 
 ## 📲 Download
 
-> **[⬇️ Download APK Terbaru](https://github.com/Ediputra07/task-tracker/releases/latest)**
+> **[⬇️ Download APK Terbaru](https://github.com/Ediputra07/task-tracker/releases/)**
 
 ## 🚀 Menjalankan Locally
 
