@@ -132,4 +132,11 @@ class TaskNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearTasks() {
+    _tasks = [];
+    _categories = [];
+    _errorMessage = null;
+    notifyListeners();
+  }
 }

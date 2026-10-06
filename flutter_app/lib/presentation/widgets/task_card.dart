@@ -218,6 +218,9 @@ class TaskCard extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
                       builder: (ctx) => TaskFormScreen(taskToEdit: task),
                     );
                   },
