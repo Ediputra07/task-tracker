@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/task_model.dart';
+import '../../../data/models/category_model.dart';
 import '../../../providers/task_provider.dart';
 import '../../../core/utils/date_formatter.dart';
 
@@ -20,6 +21,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
 
   DateTime? _selectedDueDate;
   TaskPriority _selectedPriority = TaskPriority.medium;
+  String? _selectedCategoryId;
   bool _isSaving = false;
 
   @override
@@ -28,9 +30,15 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
     _titleController = TextEditingController(text: widget.taskToEdit?.title ?? '');
     _descriptionController = TextEditingController(text: widget.taskToEdit?.description ?? '');
     _selectedDueDate = widget.taskToEdit?.dueDate;
+    _selectedCategoryId = widget.taskToEdit?.categoryId;
     if (widget.taskToEdit != null) {
       _selectedPriority = widget.taskToEdit!.priority;
     }
+
+    // Fetch categories for dropdown
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TaskNotifier>(context, listen: false).fetchCategories();
+    });
   }
 
   @override
@@ -94,6 +102,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         description: description,
         dueDate: _selectedDueDate,
         priority: _selectedPriority,
+        categoryId: _selectedCategoryId,
       );
     } else {
       success = await taskProvider.createTask(
@@ -101,6 +110,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         description: description,
         dueDate: _selectedDueDate,
         priority: _selectedPriority,
+        categoryId: _selectedCategoryId,
       );
     }
 
@@ -115,10 +125,22 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
     }
   }
 
+  Color _parseColor(String hex) {
+    try {
+      final buffer = StringBuffer();
+      if (hex.length == 7) buffer.write('ff');
+      buffer.write(hex.replaceFirst('#', ''));
+      return Color(int.parse(buffer.toString(), radix: 16));
+    } catch (_) {
+      return const Color(0xFF6366F1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.taskToEdit != null;
     final theme = Theme.of(context);
+    final categories = context.watch<TaskNotifier>().categories;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -208,6 +230,49 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               const SizedBox(height: 16),
+
+              // Category Dropdown (only shown if categories exist)
+              if (categories.isNotEmpty) ...[
+                DropdownButtonFormField<String?>(
+                  value: _selectedCategoryId,
+                  decoration: const InputDecoration(
+                    labelText: 'Kategori (Opsional)',
+                    prefixIcon: Icon(Icons.label_outline),
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    const DropdownMenuItem<String?>(
+                      value: null,
+                      child: Text('Tanpa Kategori'),
+                    ),
+                    ...categories.map((CategoryModel cat) {
+                      return DropdownMenuItem<String?>(
+                        value: cat.id,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: _parseColor(cat.color),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(cat.name),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCategoryId = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
 
               // Due Date Picker Tile
               ListTile(

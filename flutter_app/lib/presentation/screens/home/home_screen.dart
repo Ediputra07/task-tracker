@@ -175,7 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: const Icon(Icons.logout_outlined),
                       tooltip: 'Keluar',
-                      onPressed: () => authNotifier.signOut(),
+                      onPressed: () {
+                        Provider.of<TaskNotifier>(context, listen: false).clearTasks();
+                        authNotifier.signOut();
+                      },
                     ),
                     const SizedBox(width: 12),
                   ],
@@ -196,7 +199,10 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.logout_outlined),
             tooltip: 'Keluar',
-            onPressed: () => authNotifier.signOut(),
+            onPressed: () {
+              Provider.of<TaskNotifier>(context, listen: false).clearTasks();
+              authNotifier.signOut();
+            },
           ),
         ],
       ),
