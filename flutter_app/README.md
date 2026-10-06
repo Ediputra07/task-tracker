@@ -1,16 +1,62 @@
-# flutter_app
+# 📱 Task Tracker — Flutter App
 
-A new Flutter project.
+Mobile client untuk Task Tracker, dibangun dengan Flutter dan Supabase.
 
-## Getting Started
+## ✨ Fitur
 
-This project is a starting point for a Flutter application.
+- 🔐 Login & Register (Supabase Auth)
+- ✅ Create, Edit, Delete tugas
+- 🔄 Status: Todo → In Progress → Done
+- 🏷️ Prioritas: Low / Medium / High
+- 📁 Kategori dengan color indicator
+- 📅 Due date picker + deteksi overdue
+- 🔍 Filter: Today, Upcoming, All, Done
+- 📱 Responsive: Mobile & Tablet/Desktop layout
 
-A few resources to get you started if this is your first Flutter project:
+## 📲 Download
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+> **[⬇️ Download APK Terbaru](https://github.com/Ediputra07/task-tracker/releases/latest)**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Menjalankan Locally
+
+```bash
+# Install dependencies
+flutter pub get
+
+# Jalankan (debug)
+flutter run \
+  --dart-define=SUPABASE_URL=https://xxxx.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=eyJhbGci...
+
+# Build release APK
+flutter build apk --release \
+  --dart-define=SUPABASE_URL=https://xxxx.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=eyJhbGci...
+```
+
+APK output: `build/app/outputs/flutter-apk/app-release.apk`
+
+## 🗂️ Struktur
+
+```
+lib/
+├── core/
+│   ├── constants/    # Supabase config
+│   ├── theme/        # App theme (light & dark)
+│   └── utils/        # Date formatter
+├── data/
+│   ├── models/       # TaskModel, CategoryModel
+│   └── repositories/ # AuthRepository, TaskRepository
+├── providers/        # AuthNotifier, TaskNotifier
+└── presentation/
+    ├── screens/      # Auth, Home, TaskForm
+    └── widgets/      # TaskCard, DeleteDialog
+```
+
+## 🔧 Tech Stack
+
+- **Flutter** + Dart
+- **Supabase** (Auth + PostgreSQL)
+- **Provider** (state management)
+- **Google Fonts** (Inter)
+- **intl** (date formatting, locale id_ID)
