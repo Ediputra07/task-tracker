@@ -51,7 +51,7 @@ class TaskNotifier extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      _errorMessage = 'Gagal memuat tugas: $e';
+      _errorMessage = 'Gagal memuat tugas. Periksa koneksi internet Anda.';
       notifyListeners();
     }
   }
@@ -81,7 +81,7 @@ class TaskNotifier extends ChangeNotifier {
       await fetchTasks();
       return true;
     } catch (e) {
-      _errorMessage = 'Gagal membuat tugas baru: $e';
+      _errorMessage = 'Gagal membuat tugas baru.';
       notifyListeners();
       return false;
     }

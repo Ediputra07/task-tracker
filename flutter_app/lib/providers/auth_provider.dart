@@ -83,13 +83,20 @@ class AuthNotifier extends ChangeNotifier {
 
   String _translateAuthError(String message) {
     final lower = message.toLowerCase();
-    if (lower.contains('invalid login credentials') || lower.contains('invalid_credentials')) {
+    if (lower.contains('socketexception') ||
+        lower.contains('failed host lookup') ||
+        lower.contains('clientexception') ||
+        lower.contains('network') ||
+        lower.contains('connection refused')) {
+      return 'Gagal terhubung ke server. Pastikan HP Anda terhubung ke internet.';
+    } else if (lower.contains('invalid login credentials') ||
+        lower.contains('invalid_credentials')) {
       return 'Email atau password salah.';
     } else if (lower.contains('already registered') || lower.contains('already exists')) {
       return 'Email sudah terdaftar. Silakan login.';
     } else if (lower.contains('password should be at least')) {
       return 'Password minimal 6 karakter.';
     }
-    return message;
+    return 'Terjadi kesalahan. Silakan coba lagi.';
   }
 }
